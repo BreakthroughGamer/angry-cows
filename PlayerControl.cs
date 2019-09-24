@@ -5,43 +5,64 @@ using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
+
+    
     public Rigidbody2D rb;
-    bool isPressed = false;
-    private Camera cam;
-    Vector3 point = new Vector3();
-    //Event currentEvent = Event.current;
-    Vector2 mousePos = new Vector2();
     public GameObject cow;
+    public GameObject hook;
+
+    bool isPressed;
+    //KEEP
+    bool yeet;
+    private Camera cam;
+
+    Vector2 mousePos = new Vector2();
+
 
     void Start()
     {
         cam = Camera.main;
+        
     }
 
     void Update()
     {
             mousePos.x = Input.mousePosition.x;
             mousePos.y = Input.mousePosition.y;
-
+        
         if (isPressed)
         {
-
-            cow.transform.position = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, cam.nearClipPlane));
-            //rb.position = point; 
+            yeet = true;
+            rb.AddRelativeForce(cam.ScreenToWorldPoint(new Vector2(mousePos.x, mousePos.y)));
+            cow.transform.position = cam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 10)); 
         }
         
+        if (yeet)
+        {
+            rb.AddRelativeForce(new Vector2(7f, 5f));
+        }
+     
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         isPressed = true;
         rb.isKinematic = true;
+        //Debug.Log(isPressed + "<=Press || Kinetic=>" + rb.isKinematic);
+        
+
     }
 
-    void OnMouseUp()
+    private void OnMouseUp()
     {
         isPressed = false;
         rb.isKinematic = false;
-    }
+        
+        // Add force to cow based on distance from origin
+        //Shoot();
 
+        //Debug.Log(isPressed + "<=Press || Kinetic=>" + rb.isKinematic);
+        //Debug.Log(Physics.queriesHitTriggers);
+
+    }
 }
